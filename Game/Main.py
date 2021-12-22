@@ -11,12 +11,12 @@ WINDOW_SIZE = (600,400) # set up window size
 screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 display = pygame.Surface((300, 200)) # Set up screen size
 
-player_image = pygame.image.load('Assets/Sprites/Player.png')
+player_image = pygame.image.load('Game\Assets\Sprites\Player.png')
 player_location = [50, 50]
 player_y_momentum = 0
 
-grass_image = pygame.image.load('grass.png') # loads grass
-dirt_image = pygame.image.load('dirt.png') # Loads dirt
+grass_image = pygame.image.load('Game\grass.png') # loads grass
+dirt_image = pygame.image.load('Game\dirt.png') # Loads dirt
 TILE_SIZE = grass_image.get_width() # Gets width of grass
 
 game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -79,7 +79,7 @@ while playing: # game loop
 
     tile_rects = []
     y = 0
-    for row in game_map:
+    for row in game_map: 
         x = 0
         for tile in row:
             if tile == '1':
@@ -138,3 +138,4 @@ while playing: # game loop
     screen.blit(surf, (0, 0))
     pygame.display.update() # update display
     clock.tick(60) # maintain 60 fps
+
