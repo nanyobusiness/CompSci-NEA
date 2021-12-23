@@ -109,7 +109,7 @@ while playing: # game loop
     else:
         air_timer += 1
 
-    display.blit(player_image, (player_rect.x, player_rect.y))
+    display.blit(player_image, (player_rect.x-scroll[0], player_rect.y-scroll[1]))
 
     for event in pygame.event.get(): # checks for events
         if event.type == QUIT: # quits game and window
