@@ -11,13 +11,15 @@ WINDOW_SIZE = (600,400) # set up window size
 screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 display = pygame.Surface((300, 200)) # Set up screen size
 
-player_image = pygame.image.load('Game\Assets\Sprites\Player.png')
+player_image = pygame.image.load('Game\Assets\Sprites\Player_50.png')
 player_location = [50, 50]
 player_y_momentum = 0
 
-grass_image = pygame.image.load('Game\grass.png') # loads grass
-dirt_image = pygame.image.load('Game\dirt.png') # Loads dirt
+grass_image = pygame.image.load('Game\Assets\Map\grass.png') # loads grass
+dirt_image = pygame.image.load('Game\Assets\Map\dirt.png') # Loads dirt
 TILE_SIZE = grass_image.get_width() # Gets width of grass
+
+scroll = [0, 0]
 
 game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
             ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -77,16 +79,22 @@ test_rect = pygame.Rect(100,100,100,50)
 while playing: # game loop
     display.fill((146,244,255))
 
+    scroll[0] += (player_rect.x-scroll[0]-120) # move the scroll by the difference of the player and 0,0 on the X
+    scroll[1] += (player_rect.y-scroll[1]-86) # move the scroll by the difference of the player and 0,0 on the Y
+
+
+
     tile_rects = []
     y = 0
-    for row in game_map: 
+    for row in game_map: # for each individual list in the compound list
         x = 0
-        for tile in row:
-            if tile == '1':
-                display.blit(dirt_image, (x * TILE_SIZE, y * TILE_SIZE))
-            if tile == '2':
-                display.blit(grass_image, (x * TILE_SIZE, y * TILE_SIZE))
-            if tile != '0':
+        for tile in row: # for each item in the individual list
+            # scroll is subtracting so that all tiles in the screen move by the characters position, giving the illusion that the camera is following the player when really the tiles are just moving on the screen.
+            if tile == '1': # if game item is 1, render dirt tile of according width 
+                display.blit(dirt_image, (x * TILE_SIZE-scroll[0], y * TILE_SIZE-scroll[1]))  
+            if tile == '2': # if game item is 2, render grass tile of according width
+                display.blit(grass_image, (x * TILE_SIZE-scroll[0], y * TILE_SIZE-scroll[1]))
+            if tile != '0': # if game item is 0, render nothing
                 tile_rects.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
             x += 1
         y += 1
