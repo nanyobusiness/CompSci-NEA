@@ -69,12 +69,12 @@ def move(rect, movement, tiles):
     return rect, collision_types
 
 def xmomentum_stabilise(momentum):
-    if momentum < 0.4 and momentum > -0.4: # sets momentum to 0 after its close enough
+    if momentum < 0.2 and momentum > -0.2: # sets momentum to 0 after its close enough
         momentum = 0
     elif momentum < 0: # increments/decrements momentum such that it slowly nears 0
-        momentum += 0.4
+        momentum += 0.2
     elif momentum > 0:
-        momentum -= 0.4
+        momentum -= 0.2
     return momentum
 
 moving_right = False
@@ -135,7 +135,7 @@ while playing: # game loop
     
     if player_rect.colliderect(enemy1_rect): # function to test for collisions between two rects
         player_momentum[1] = -3 # sets the players momentum to push them into the air
-        if player_rect[0] - 20 < enemy1_rect[0]: # if the player is on the left of the enemy
+        if player_rect[0] - 16 < enemy1_rect[0]: # if the player is on the left of the enemy
             player_momentum[0] -= 2 # send player leftward
             enemy1_momentum[0] += 4 # send enemy rightward
         else:
