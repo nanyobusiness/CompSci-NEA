@@ -11,16 +11,16 @@ WINDOW_SIZE = (600,400) # set up window size
 screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 display = pygame.Surface((300, 200)) # Set up screen size
 
-player_image = pygame.image.load('Game\Assets\Sprites\Player_50.png')
+player_image = pygame.image.load('Assets\Sprites\Player_50.png')
 player_location = [50, 50]
 player_momentum = [0, 0]
 
-enemy1_image = pygame.image.load('Game\Assets\Sprites\EnemyOne.png')
+enemy1_image = pygame.image.load('Assets\Sprites\EnemyOne.png')
 enemy1_location = [50, 50]
 enemy1_momentum = [0,0]
 
-grass_image = pygame.image.load('Game\Assets\Map\grass.png') # loads grass
-dirt_image = pygame.image.load('Game\Assets\Map\dirt.png') # Loads dirt
+grass_image = pygame.image.load('Assets\Map\grass.png') # loads grass
+dirt_image = pygame.image.load('Assets\Map\dirt.png') # Loads dirt
 TILE_SIZE = grass_image.get_width() # Gets width of grass
 
 scroll = [0, 0]
