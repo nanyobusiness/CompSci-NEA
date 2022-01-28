@@ -14,6 +14,9 @@ display = pygame.Surface((300, 200)) # Set up screen size
 player_image = pygame.image.load('Assets\Sprites\Player_50.png')
 player_location = [50, 50]
 player_momentum = [0, 0]
+playerattacking = False
+attacktimer = 10
+cooldown = 0
 
 enemy1_image = pygame.image.load('Assets\Sprites\EnemyOne.png')
 enemy1_location = [50, 50]
@@ -22,6 +25,10 @@ enemy1_momentum = [0,0]
 grass_image = pygame.image.load('Assets\Map\grass.png') # loads grass
 dirt_image = pygame.image.load('Assets\Map\dirt.png') # Loads dirt
 TILE_SIZE = grass_image.get_width() # Gets width of grass
+
+heart_image = pygame.image.load('Assets\Icons\heart.png') # Loads lives icon
+lives = 5
+
 
 scroll = [0, 0]
 
@@ -113,6 +120,14 @@ while playing: # game loop
             x += 1
         y += 1
 
+    # Health
+    healthpos = -2
+    for i in range(lives):
+        healthpos += 7
+        display.blit(heart_image, (healthpos, 5))
+
+
+
     player_movement = [0, 0] # initalises movement to 0 each tick
     if moving_right:
         player_movement[0] += 2 # sets movement to 2, player actually moves inside the move function
@@ -133,14 +148,26 @@ while playing: # game loop
     else:
         enemy1_movement[0] -= 1
     
+    # COLLISIONS BETWEEN PLAYER AND ENEMY
+
     if player_rect.colliderect(enemy1_rect): # function to test for collisions between two rects
-        player_momentum[1] = -3 # sets the players momentum to push them into the air
-        if player_rect[0] - 16 < enemy1_rect[0]: # if the player is on the left of the enemy
-            player_momentum[0] -= 2 # send player leftward
-            enemy1_momentum[0] += 4 # send enemy rightward
+        if playerattacking:
+            enemy1_momentum[1] = -3 # sets the enemy's momentum to push them into the air
+            if player_rect[0] - 16 < enemy1_rect[0]: # if the player is on the left of the enemy
+                player_momentum[0] -= 1 # send player leftward
+                enemy1_momentum[0] += 5 # send enemy rightward
+            else:
+                player_momentum[0] += 1 # send player rightward
+                enemy1_momentum[0] -= 5 # send enemy leftward
         else:
-            player_momentum[0] += 2 # send player rightward
-            enemy1_momentum[0] -= 4 # send enemy leftward
+            lives -= 1 # LOSE A LIFE
+            player_momentum[1] = -3 # sets the players momentum to push them into the air
+            if player_rect[0] - 16 < enemy1_rect[0]: # if the player is on the left of the enemy
+                player_momentum[0] -= 2 # send player leftward
+                enemy1_momentum[0] += 4 # send enemy rightward
+            else:
+                player_momentum[0] += 2 # send player rightward
+                enemy1_momentum[0] -= 4 # send enemy leftward
 
     player_momentum[0] = xmomentum_stabilise(player_momentum[0])
     player_movement[0] += player_momentum[0] # add momentum
@@ -169,23 +196,42 @@ while playing: # game loop
             pygame.quit() # stop pygame
             sys.exit() # stop script
         if event.type == KEYDOWN: # If a key is put down
-            if event.key == K_RIGHT: # If the key is right arrow
+            if event.key == K_d: # If the key is right arrow
                 moving_right = True 
 
-            if event.key == K_LEFT: # If the key is left arrow
+            if event.key == K_a: # If the key is left arrow
                 moving_left = True
 
-            if event.key == K_UP: # If the key is up arrow
+            if event.key == K_w or event.key == K_SPACE: # If the key is up arrow
                 if air_timer < 6:
                     player_momentum[1] = -5 # As momentum is usually negative due to gravity this puts it up and at 5
 
+            if event.key == K_j:
+                if cooldown < 0:
+                    playerattacking = True
+
         if event.type == KEYUP: # When key is released
-            if event.key == K_RIGHT:
+            if event.key == K_d:
 
                 moving_right = False  # No longer moving
-            if event.key == K_LEFT:
+            if event.key == K_a:
 
                 moving_left = False # No longer moving
+
+    if playerattacking: # if player is attacking
+        player_image = pygame.image.load('Assets\Sprites\Player_attack.png') # show attacking sprite and begin countdown
+        attacktimer -= 1 
+        if attacktimer < 1: # when countdown hits 0
+            player_image = pygame.image.load('Assets\Sprites\Player_50.png') # show normal sprite and disable attacking state
+            playerattacking = False
+            attacktimer = 10
+            cooldown = 45
+    cooldown -= 1
+        
+    if lives < 1:
+        # Code for the end screen phase
+        pygame.quit()
+        sys.exit()
 
     surf = pygame.transform.scale(display, WINDOW_SIZE)
     screen.blit(surf, (0, 0))
