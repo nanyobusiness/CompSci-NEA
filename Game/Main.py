@@ -1,8 +1,12 @@
 #Libraries
+from turtle import back
 import pygame, sys # import pygame and sys
 from pygame.locals import * # import pygame modules
 
 pygame.init() # initiate pygame
+pygame.font.init() 
+
+
 
 #Pygame main variables
 pygame.display.set_caption('Project Neon') # set the window name
@@ -12,6 +16,9 @@ screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 display = pygame.Surface((300, 200)) # Set up screen size
 
 background = pygame.image.load('Assets\Backgrounds\Start.png')
+menuborder = pygame.image.load('Assets\Backgrounds\MenuBorder.png')
+font = pygame.font.Font('Assets\Fonts\ThaleahFat_TTF.ttf', 15)
+back_arrow = pygame.image.load('Assets\Icons\Backarrow.png')
 
 player_image = pygame.image.load('Assets\Sprites\Player_50.png')
 player_location = [50, 50]
@@ -96,28 +103,62 @@ player_rect = pygame.Rect(50, 50, player_image.get_width(), player_image.get_hei
 enemy1_rect = pygame.Rect(100, 50, enemy1_image.get_width(), enemy1_image.get_height())
 test_rect = pygame.Rect(100,100,100,50)
 
+playing = False
+keybinds = False
+
 while 1:
     while 1:
         display.blit(background, (0,0))
+        display.blit(menuborder, (0, 0))
+        mouse = pygame.mouse.get_pos()
 
         for event in pygame.event.get(): # checks for events
             if event.type == QUIT: # quits game and window
                 pygame.quit() # stop pygame
-                sys.exit() # stop script
+                sys.exit() # stop script-
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
+                    playing = True
+                if 50 < mouse[0] < 250 and 200 < mouse[1] < 240:
+                    keybinds = True
+                if 10 < mouse[0] < 40 and 10 < mouse[1] < 40:
+                    keybinds = False
 
-        
+        if keybinds:
+            display.blit(back_arrow, (8, 8))
+
+            pygame.draw.rect(display, (56,28,84), [25, 60, 90, 65])
+            pygame.draw.rect(display, (140,84,156), [25, 60, 90, 2])
+            display.blit(font.render('Up = W/Space', True, (255,255,255)), (28, 65))
+            display.blit(font.render('A = Left', True, (255,255,255)), (28, 80))
+            display.blit(font.render('D = Right', True, (255,255,255)), (28, 95))
+            display.blit(font.render('J = Attack', True, (255,255,255)), (28, 110))
+        else:
+            if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
+                pygame.draw.rect(display, (140,84,156), [25, 60, 90, 20]) 
+            else:
+                pygame.draw.rect(display, (56,28,84), [25, 60, 90, 20])
+            pygame.draw.rect(display, (140,84,156), [25, 60, 90, 2])
+            display.blit(font.render('Start Game', True, (255,255,255)), (30, 65))
+
+            if 50 < mouse[0] < 250 and 200 < mouse[1] < 240:
+                pygame.draw.rect(display, (140,84,156), [25, 100, 100, 20]) 
+            else:
+                pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
+            pygame.draw.rect(display, (140,84,156), [25, 100, 100, 2])
+            display.blit(font.render('Edit Keybinds', True, (255,255,255)), (30, 105))
+
 
         surf = pygame.transform.scale(display, WINDOW_SIZE)
         screen.blit(surf, (0, 0))
         pygame.display.update() # update display
         clock.tick(60) # maintain 60 fps   
 
-        playing = True # playing condition
-        # if playing == True:
-        #     break
+        if playing == True:
+            break
 
     while playing: # game loop
-        
+
         display.fill((146,244,255))
 
         scroll[0] += (player_rect.x-scroll[0]-120) # move the scroll by the difference of the player and 0,0 on the X
@@ -226,7 +267,7 @@ while 1:
                     if air_timer < 6:
                         player_momentum[1] = -5 # As momentum is usually negative due to gravity this puts it up and at 5
 
-                if event.key == K_j:
+                if event.key == 'K_j':
                     if cooldown < 0:
                         playerattacking = True
 
