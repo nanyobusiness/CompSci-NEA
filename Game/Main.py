@@ -148,7 +148,7 @@ while 1:
             else:
                 pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
             pygame.draw.rect(display, (140,84,156), [25, 100, 100, 2])
-            display.blit(font.render('Edit Keybinds', True, (255,255,255)), (30, 105))
+            display.blit(font.render('Show Keybinds', True, (255,255,255)), (30, 105))
 
 
         surf = pygame.transform.scale(display, WINDOW_SIZE)
