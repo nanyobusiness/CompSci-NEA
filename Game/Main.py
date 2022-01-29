@@ -117,12 +117,14 @@ while 1:
                 pygame.quit() # stop pygame
                 sys.exit() # stop script-
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
-                    playing = True
-                if 50 < mouse[0] < 250 and 200 < mouse[1] < 240:
-                    keybinds = True
-                if 10 < mouse[0] < 40 and 10 < mouse[1] < 40:
-                    keybinds = False
+                if keybinds == False:
+                    if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
+                        playing = True
+                    if 50 < mouse[0] < 250 and 200 < mouse[1] < 240:
+                        keybinds = True
+                else:
+                    if 10 < mouse[0] < 40 and 10 < mouse[1] < 40:
+                        keybinds = False
 
         if keybinds:
             display.blit(back_arrow, (8, 8))
@@ -267,7 +269,7 @@ while 1:
                     if air_timer < 6:
                         player_momentum[1] = -5 # As momentum is usually negative due to gravity this puts it up and at 5
 
-                if event.key == 'K_j':
+                if event.key == K_j:
                     if cooldown < 0:
                         playerattacking = True
 
