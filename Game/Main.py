@@ -23,6 +23,7 @@ back_arrow = pygame.image.load('Assets\Icons\Backarrow.png')
 player_image = pygame.image.load('Assets\Sprites\Player_50.png')
 player_location = [50, 50]
 player_momentum = [0, 0]
+
 playerattacking = False
 attacktimer = 10
 cooldown = 0
@@ -161,6 +162,7 @@ while 1:
             gameclock = 0
             break
     lives = 5
+
     while playing: # game loop
 
         gameclock += 1
@@ -323,7 +325,8 @@ while 1:
                 sys.exit() # stop script-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
-                    playing = True
+                    pygame.quit()
+                    sys.exit()
                 if 50 < mouse[0] < 250 and 200 < mouse[1] < 240:
                     fullscore = True
                 else: 
@@ -334,7 +337,7 @@ while 1:
         else:
             pygame.draw.rect(display, (56,28,84), [25, 60, 90, 20])
         pygame.draw.rect(display, (140,84,156), [25, 60, 90, 2])
-        display.blit(font.render('Start Menu', True, (255,255,255)), (30, 65))
+        display.blit(font.render('Quit', True, (255,255,255)), (30, 65))
 
         if fullscore:
             pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
@@ -348,8 +351,3 @@ while 1:
         screen.blit(surf, (0, 0))
         pygame.display.update() # update display
         clock.tick(60) # maintain 60 fps   
-
-        if playing == True:
-            score = 0
-            gameclock = 0
-            break
