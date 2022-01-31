@@ -103,10 +103,10 @@ player_rect = pygame.Rect(50, 50, player_image.get_width(), player_image.get_hei
 enemy1_rect = pygame.Rect(100, 50, enemy1_image.get_width(), enemy1_image.get_height())
 test_rect = pygame.Rect(100,100,100,50)
 
-playing = False
-keybinds = False
-
 while 1:
+    end = False
+    playing = False
+    keybinds = False
     while 1:
         display.blit(background, (0,0))
         display.blit(menuborder, (0, 0))
@@ -157,10 +157,13 @@ while 1:
         clock.tick(60) # maintain 60 fps   
 
         if playing == True:
+            score = 0
+            gameclock = 0
             break
-
+    lives = 5
     while playing: # game loop
 
+        gameclock += 1
         display.fill((146,244,255))
 
         scroll[0] += (player_rect.x-scroll[0]-120) # move the scroll by the difference of the player and 0,0 on the X
@@ -291,12 +294,62 @@ while 1:
                 cooldown = 45
         cooldown -= 1
             
+        display.blit(font.render(f'Score: {round(score, 3)}', True, (255,255,255)), (150, 5))
+        if gameclock % 10 == 0:
+            score += (0.2*lives)/10
+            display.blit(font.render(f'Score: {round(score, 3)}', True, (255,255,255)), (150, 5))
+
         if lives < 1:
             # Code for the end screen phase
-            pygame.quit()
-            sys.exit()
+            finalscore = score
+            end = True
+            break
 
         surf = pygame.transform.scale(display, WINDOW_SIZE)
         screen.blit(surf, (0, 0))
         pygame.display.update() # update display
         clock.tick(60) # maintain 60 fps
+
+    playing = False
+    fullscore = False
+    while end:
+        display.blit(background, (0,0))
+        display.blit(menuborder, (0, 0))
+        mouse = pygame.mouse.get_pos()
+
+        for event in pygame.event.get(): # checks for events
+            if event.type == QUIT: # quits game and window
+                pygame.quit() # stop pygame
+                sys.exit() # stop script-
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
+                    playing = True
+                if 50 < mouse[0] < 250 and 200 < mouse[1] < 240:
+                    fullscore = True
+                else: 
+                    fullscore = False
+
+        if 50 < mouse[0] < 230 and 120 < mouse[1] < 160:
+            pygame.draw.rect(display, (140,84,156), [25, 60, 90, 20]) 
+        else:
+            pygame.draw.rect(display, (56,28,84), [25, 60, 90, 20])
+        pygame.draw.rect(display, (140,84,156), [25, 60, 90, 2])
+        display.blit(font.render('Start Menu', True, (255,255,255)), (30, 65))
+
+        if fullscore:
+            pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
+            display.blit(font.render(f'{round(finalscore, 10)}...', True, (255,255,255)), (30, 105))
+        else:
+            pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
+            display.blit(font.render(f'Score = {round(finalscore, 3)}', True, (255,255,255)), (30, 105))
+
+
+        surf = pygame.transform.scale(display, WINDOW_SIZE)
+        screen.blit(surf, (0, 0))
+        pygame.display.update() # update display
+        clock.tick(60) # maintain 60 fps   
+
+        if playing == True:
+            score = 0
+            gameclock = 0
+            break
