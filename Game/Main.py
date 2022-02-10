@@ -361,7 +361,6 @@ while 1:
                         pause = False
                         break
 
-
             display.blit(back_arrow, (8, 8))
             pygame.draw.rect(display, (35,21,48), [60, 60, 180, 65])
             pygame.draw.rect(display, (255,255,255), [60, 60, 180, 2])
