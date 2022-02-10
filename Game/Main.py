@@ -169,6 +169,7 @@ while 1:
             gameclock = 0
             break
     lives = 5
+    pause = False
 
     while playing: # game loop
 
@@ -297,6 +298,8 @@ while 1:
                 if event.key == K_j:
                     if cooldown < 0:
                         playerattacking = True
+                if event.key == K_ESCAPE:
+                    pause = True
 
             if event.type == KEYUP: # When key is released
                 if event.key == K_d:
@@ -326,6 +329,37 @@ while 1:
             finalscore = score
             end = True
             break
+
+
+## CODE FOR PAUSE PHASE
+
+
+        while pause:
+            display.fill((0,0,0))
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get(): # checks for events
+                if event.type == QUIT: # quits game and window
+                    pygame.quit() # stop pygame
+                    sys.exit() # stop script-
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if 15 < mouse[0] < 55 and 15 < mouse[1] < 55:
+                        pause = False
+                        break
+
+            print(mouse)
+
+            display.blit(back_arrow, (8, 8))
+            pygame.draw.rect(display, (35,21,48), [60, 60, 180, 65])
+            pygame.draw.rect(display, (255,255,255), [60, 60, 180, 2])
+            display.blit(font.render('Game is paused, press', True, (255,255,255)), (63, 75))
+            display.blit(font.render('back arrow to resume.', True, (255,255,255)), (63, 100))
+
+            surf = pygame.transform.scale(display, WINDOW_SIZE)
+            screen.blit(surf, (0, 0))
+            pygame.display.update() # update display
+            clock.tick(60) # maintain 60 fps   
+
 
         surf = pygame.transform.scale(display, WINDOW_SIZE)
         screen.blit(surf, (0, 0))
