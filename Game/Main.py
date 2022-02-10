@@ -45,7 +45,7 @@ TILE_SIZE = top_image.get_width() # Gets width of tile
 
 heart_image = pygame.image.load('Assets\Icons\heart.png') # Loads lives icon
 lives = 5
-
+enemydamage = 0
 
 scroll = [0, 0]
 
@@ -170,9 +170,13 @@ while 1:
             break
     lives = 5
     pause = False
+    lifecooldown = 0
+    damagecooldown = 0
 
     while playing: # game loop
 
+        damagecooldown += 1
+        lifecooldown += 1
         gameclock += 1
         display.fill((82, 40, 112))
 
@@ -215,6 +219,7 @@ while 1:
             healthpos += 7
             display.blit(heart_image, (healthpos, 5))
 
+        display.blit(font.render(f'Hits Dealt: {enemydamage}', True, (255,255,255)), (60, 3))
 
 
         player_movement = [0, 0] # initalises movement to 0 each tick
@@ -248,8 +253,10 @@ while 1:
                 else:
                     player_momentum[0] += 1 # send player rightward
                     enemy1_momentum[0] -= 5 # send enemy leftward
+                if damagecooldown > 10:
+                    enemydamage += 1
+                    damagecooldown = 0 
             else:
-                lives -= 1 # LOSE A LIFE
                 player_momentum[1] = -3 # sets the players momentum to push them into the air
                 if player_rect[0] - 16 < enemy1_rect[0]: # if the player is on the left of the enemy
                     player_momentum[0] -= 2 # send player leftward
@@ -257,6 +264,9 @@ while 1:
                 else:
                     player_momentum[0] += 2 # send player rightward
                     enemy1_momentum[0] -= 4 # send enemy leftward
+                if lifecooldown > 10:
+                    lives -= 1 # LOSE A LIFE
+                    lifecooldown = 0
 
         player_momentum[0] = xmomentum_stabilise(player_momentum[0])
         player_movement[0] += player_momentum[0] # add momentum
@@ -267,6 +277,10 @@ while 1:
 
         if enemy1_collisions['bottom']:
             enemy1_momentum[0] = 0
+        
+        if enemy1_collisions['left'] or enemy1_collisions['right']:
+            enemy1_momentum[1] = -3
+
 
         player_rect, collisions = move(player_rect, player_movement, tile_rects)
 
@@ -319,10 +333,10 @@ while 1:
                 cooldown = 45
         cooldown -= 1
             
-        display.blit(font.render(f'Score: {round(score, 3)}', True, (255,255,255)), (150, 5))
+        display.blit(font.render(f'Score: {round(score, 3)}', True, (255,255,255)), (200, 3))
         if gameclock % 10 == 0:
             score += (0.2*lives)/10
-            display.blit(font.render(f'Score: {round(score, 3)}', True, (255,255,255)), (150, 5))
+            display.blit(font.render(f'Score: {round(score, 3)}', True, (255,255,255)), (200, 3))
 
         if lives < 1:
             # Code for the end screen phase
@@ -347,7 +361,6 @@ while 1:
                         pause = False
                         break
 
-            print(mouse)
 
             display.blit(back_arrow, (8, 8))
             pygame.draw.rect(display, (35,21,48), [60, 60, 180, 65])
@@ -365,6 +378,16 @@ while 1:
         screen.blit(surf, (0, 0))
         pygame.display.update() # update display
         clock.tick(60) # maintain 60 fps
+
+
+
+
+
+
+
+
+
+
 
     playing = False
     fullscore = False
