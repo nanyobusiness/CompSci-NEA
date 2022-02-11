@@ -41,6 +41,11 @@ lefttop_image = pygame.image.load('Assets\Map\LeftTop.png')
 left_image = pygame.image.load('Assets\Map\left.png')
 right_image = pygame.image.load('Assets\Map\Right.png')
 
+runloop = ['Assets\Sprites\RunLoop\item1.png', 'Assets\Sprites\RunLoop\item2.png', 'Assets\Sprites\RunLoop\item3.png', 'Assets\Sprites\RunLoop\item4.png', 'Assets\Sprites\RunLoop\item5.png', 'Assets\Sprites\RunLoop\item6.png']
+swingloop = ['Assets\Sprites\SwingLoop\item1.png', 'Assets\Sprites\SwingLoop\item1.png',  'Assets\Sprites\SwingLoop\item2.png', 'Assets\Sprites\SwingLoop\item2.png',  'Assets\Sprites\SwingLoop\item3.png', 'Assets\Sprites\SwingLoop\item3.png',  'Assets\Sprites\SwingLoop\item4.png', 'Assets\Sprites\SwingLoop\item4.png',  'Assets\Sprites\SwingLoop\item5.png', 'Assets\Sprites\SwingLoop\item5.png',  'Assets\Sprites\SwingLoop\item6.png', 'Assets\Sprites\SwingLoop\item6.png'] 
+runningcount = 0
+swingcount = 0
+
 TILE_SIZE = top_image.get_width() # Gets width of tile
 
 heart_image = pygame.image.load('Assets\Icons\heart.png') # Loads lives icon
@@ -290,6 +295,29 @@ while 1:
         else:
             air_timer += 1
 
+
+        #Animations
+        runningcount += 1
+        file = runloop[runningcount // 7]
+        if runningcount == 36:
+            runningcount = 0
+        if moving_left:
+            player_image = pygame.image.load(file)
+        if moving_right:
+            player_image = pygame.transform.flip(pygame.image.load(file), True, False)
+
+        if playerattacking:
+            file = swingloop[swingcount]
+            swingcount += 1
+            if swingcount == 12:
+                swingcount = 0
+            if moving_left:
+                player_image = pygame.image.load(file)
+            else:
+                player_image = pygame.transform.flip(pygame.image.load(file), True, False)
+
+
+
         display.blit(enemy1_image, (enemy1_rect[0]-scroll[0], enemy1_rect[1]-scroll[1]))
         display.blit(player_image, (player_rect.x-scroll[0], player_rect.y-scroll[1]))
         
@@ -300,9 +328,11 @@ while 1:
                 sys.exit() # stop script
             if event.type == KEYDOWN: # If a key is put down
                 if event.key == K_d: # If the key is right arrow
+                    player_image = pygame.transform.flip(player_image, True, False)
                     moving_right = True 
 
                 if event.key == K_a: # If the key is left arrow
+                    player_image = pygame.transform.flip(player_image, True, False)
                     moving_left = True
 
                 if event.key == K_w or event.key == K_SPACE: # If the key is up arrow
@@ -317,10 +347,10 @@ while 1:
 
             if event.type == KEYUP: # When key is released
                 if event.key == K_d:
-
+                    player_image = pygame.transform.flip(player_image, True, False)
                     moving_right = False  # No longer moving
                 if event.key == K_a:
-
+                    player_image = pygame.transform.flip(player_image, True, False)
                     moving_left = False # No longer moving
 
         if playerattacking: # if player is attacking
