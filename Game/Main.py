@@ -180,8 +180,8 @@ while 1:
 
     while playing: # game loop
 
-        damagecooldown += 1
-        lifecooldown += 1
+        damagecooldown += 0.5
+        lifecooldown += 0.5
         gameclock += 1
         display.fill((82, 40, 112))
 
