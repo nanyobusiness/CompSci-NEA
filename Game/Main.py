@@ -18,6 +18,7 @@ display = pygame.Surface((300, 200)) # Set up screen size
 background = pygame.image.load('Assets\Backgrounds\Start.png')
 menuborder = pygame.image.load('Assets\Backgrounds\MenuBorder.png')
 font = pygame.font.Font('Assets\Fonts\ThaleahFat_TTF.ttf', 15)
+fontsmall = pygame.font.Font('Assets\Fonts\ThaleahFat_TTF.ttf', 10)
 back_arrow = pygame.image.load('Assets\Icons\Backarrow.png')
 
 player_image = pygame.image.load('Assets\Sprites\Player_50.png')
@@ -139,6 +140,11 @@ while 1:
                     if 10 < mouse[0] < 40 and 10 < mouse[1] < 40:
                         keybinds = False
 
+
+
+        display.blit(fontsmall.render('Thanks to:', True, (255,255,255)), (2, 178))
+        display.blit(fontsmall.render('Xx_D4wi1n_>w< _uwu_xX, xX_DemonSlayer240_Xx2006, shaz, Milky', True, (255,255,255)), (2, 187))
+        
         if keybinds:
             display.blit(back_arrow, (8, 8))
 
