@@ -2,6 +2,7 @@
 from turtle import back
 import pygame, sys # import pygame and sys
 from pygame.locals import * # import pygame modules
+from datetime import date
 
 pygame.init() # initiate pygame
 pygame.font.init() 
@@ -19,6 +20,7 @@ background = pygame.image.load('Assets\Backgrounds\Start.png')
 menuborder = pygame.image.load('Assets\Backgrounds\MenuBorder.png')
 font = pygame.font.Font('Assets\Fonts\ThaleahFat_TTF.ttf', 15)
 fontsmall = pygame.font.Font('Assets\Fonts\ThaleahFat_TTF.ttf', 10)
+tinyfont = pygame.font.SysFont('cambria',9)
 back_arrow = pygame.image.load('Assets\Icons\Backarrow.png')
 
 player_image = pygame.image.load('Assets\Sprites\Player_50.png')
@@ -168,6 +170,32 @@ while 1:
                 pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
             pygame.draw.rect(display, (140,84,156), [25, 100, 100, 2])
             display.blit(font.render('Show Keybinds', True, (255,255,255)), (30, 105))
+
+        # Print Past scores
+        display.blit(tinyfont.render("Past Scores: ", True, (255, 255, 255)), (170, 0))
+        highscores = open("Assets\highscores.txt", "r")
+        lines = highscores.readlines()
+        textheight = 0
+        for lineNo in range(4):
+            try:
+                display.blit(tinyfont.render(lines[lineNo][:-1], True, (255,255,255)), (225, lineNo*10))
+            except:
+                break
+
+        
+        # Print highest score
+        highscore = 0
+        highscoreline = ""
+        for line in lines:
+            if float(line[:3]) > highscore:
+                highscore = float(line[:3])
+                highscoreline = line
+
+
+
+        display.blit(tinyfont.render("Highscore: ", True, (0,0,0)), (233, 55))
+        display.blit(tinyfont.render(highscoreline[:-1], True, (0,0,0)), (233, 65))
+
 
 
         surf = pygame.transform.scale(display, WINDOW_SIZE)
@@ -426,6 +454,12 @@ while 1:
 
     playing = False
     fullscore = False
+
+    time = date.today()
+    highscores = open("Assets\highscores.txt", "a")
+    highscores.write(f"{round(finalscore, 3)}: {time}\n")
+    highscores.close
+
     while end:
         display.blit(background, (0,0))
         display.blit(menuborder, (0, 0))
@@ -457,6 +491,7 @@ while 1:
         else:
             pygame.draw.rect(display, (56,28,84), [25, 100, 100, 20])
             display.blit(font.render(f'Score = {round(finalscore, 3)}', True, (255,255,255)), (30, 105))
+
 
 
         surf = pygame.transform.scale(display, WINDOW_SIZE)
