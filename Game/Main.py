@@ -15,6 +15,7 @@ clock = pygame.time.Clock() # set up the clock
 WINDOW_SIZE = (600,400) # set up window size
 screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate screen
 display = pygame.Surface((300, 200)) # Set up screen size
+clockspeed = 60
 
 background = pygame.image.load('Assets\Backgrounds\Start.png')
 menuborder = pygame.image.load('Assets\Backgrounds\MenuBorder.png')
@@ -221,7 +222,6 @@ while 1:
 
         scroll[0] += (player_rect.x-scroll[0]-120) # move the scroll by the difference of the player and 0,0 on the X
         scroll[1] += (player_rect.y-scroll[1]-86) # move the scroll by the difference of the player and 0,0 on the Y
-
 
 
         tile_rects = []
@@ -497,4 +497,4 @@ while 1:
         surf = pygame.transform.scale(display, WINDOW_SIZE)
         screen.blit(surf, (0, 0))
         pygame.display.update() # update display
-        clock.tick(60) # maintain 60 fps   
+        clock.tick(clockspeed) # maintain 60 fps   
