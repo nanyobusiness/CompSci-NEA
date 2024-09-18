@@ -1,2 +1,2 @@
-# CompSci NEA
- A Level Computer Science NEA
+# PyGame Project
+ A Level Python project with PyGame libraries.
